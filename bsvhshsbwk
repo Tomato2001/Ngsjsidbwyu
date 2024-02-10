@@ -1,4 +1,3 @@
-
 -- Создаем локальную переменную для хранения игрока
 local player = game.Players.LocalPlayer
 
