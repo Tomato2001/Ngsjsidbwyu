@@ -1,0 +1,670 @@
+
+-- Создаем локальную переменную для хранения игрока
+local player = game.Players.LocalPlayer
+
+-- Создаем локальную переменную для хранения графического интерфейса
+local gui = Instance.new("ScreenGui", player.PlayerGui)
+
+-- Создаем локальную переменную для хранения фрейма меню
+local menu = Instance.new("Frame", gui)
+menu.Name = "Menu"
+menu.Size = UDim2.new(0.7, 0, 0.8, 0)
+menu.Position = UDim2.new(0.15, 0, 0.08, 0)
+menu.BackgroundTransparency = 1
+menu.Draggable = true -- Включаем функцию перетаскивания
+
+-- После создания объекта 'menu', но перед созданием кнопок:
+local backgroundImage = Instance.new("ImageLabel")
+backgroundImage.Name = "BackgroundImage"
+backgroundImage.Size = UDim2.new(1, 0, 1, 0) -- Занимает весь фрейм меню
+backgroundImage.Position = UDim2.new(0, 0, 0, 0)
+backgroundImage.Image = "rbxassetid://16218823113" -- Замените ваш_asset_id на актуальный AssetId изображения
+backgroundImage.ScaleType = Enum.ScaleType.Stretch -- Растягиваем изображение на весь фрейм
+backgroundImage.ZIndex = 1 -- Установите ZIndex меньше, чем у кнопок
+backgroundImage.Parent = menu -- Родительский элемент - это фрейм меню
+
+-- Делаем фон фрейма меню полностью прозрачным
+menu.BackgroundTransparency = 1
+
+
+-- Создаем локальную переменную для хранения заголовка меню
+local title = Instance.new("TextLabel", menu)
+title.Name = "Title"
+title.Size = UDim2.new(1, 0, 0.1, 0)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.BackgroundColor3 = Color3.new(0, 0, 0)
+title.BackgroundTransparency = 0.5
+title.Text = "🍅 Tomato Hub 🍅"
+title.TextColor3 = Color3.new(1, 1, 1)
+title.TextScaled = true
+title.Font = Enum.Font.SourceSansBold
+
+-- Создаем локальную переменную для хранения кнопки закрытия меню
+local closeButton = Instance.new("TextButton", menu)
+closeButton.Name = "CloseButton"
+closeButton.Size = UDim2.new(0.1, 0, 0.1, 0)
+closeButton.Position = UDim2.new(0.9, 0, 0, 0)
+closeButton.BackgroundColor3 = Color3.new(1, 0, 0)
+closeButton.BackgroundTransparency = 0.5
+closeButton.Text = "Х"
+closeButton.TextColor3 = Color3.new(1, 1, 1)
+closeButton.TextScaled = true
+closeButton.Font = Enum.Font.SourceSansBold
+
+-- Предположим, что closeButton — это кнопка закрытия на первой странице
+closeButton.MouseButton1Click:Connect(function()
+    menu.Visible = false -- Скрываем только первую страницу
+end)
+
+
+-- Создаем локальную переменную для хранения кнопки сворачивания меню
+local minimizeButton = Instance.new("TextButton", menu)
+minimizeButton.Name = "MinimizeButton"
+minimizeButton.Size = UDim2.new(0.1, 0, 0.1, 0)
+minimizeButton.Position = UDim2.new(0.8, 0, 0, 0) -- Сдвигаем налево относительно кнопки закрытия
+minimizeButton.BackgroundColor3 = Color3.new(0, 0, 1)
+minimizeButton.BackgroundTransparency = 0.5
+minimizeButton.Text = "–"
+minimizeButton.TextColor3 = Color3.new(1, 1, 1)
+minimizeButton.TextScaled = true
+minimizeButton.Font = Enum.Font.SourceSansBold
+
+-- Создаем локальную переменную для хранения кнопки разворачивания меню
+local expandButton = Instance.new("TextButton", gui)
+expandButton.Name = "ExpandButton"
+expandButton.Size = UDim2.new(0.1, 0, 0.1, 0)
+expandButton.Position = UDim2.new(0.1, 0, 0.1, 0) -- Позиция на экране
+expandButton.BackgroundColor3 = Color3.new(0, 0, 0)
+expandButton.BackgroundTransparency = 0.5
+expandButton.Text = "+"
+expandButton.TextColor3 = Color3.new(1, 1, 1)
+expandButton.TextScaled = true
+expandButton.Font = Enum.Font.SourceSansBold
+expandButton.Visible = false -- Сначала кнопка невидима
+
+-- Функция для сворачивания меню
+minimizeButton.MouseButton1Click:Connect(function()
+    menu.Visible = false
+    expandButton.Visible = true
+end)
+
+-- Функция для разворачивания меню
+expandButton.MouseButton1Click:Connect(function()
+    menu.Visible = true
+    expandButton.Visible = false
+end)
+
+-- Предполагаем, что весь предыдущий код остается без изменений
+
+-- Создаем вторую страницу меню
+local secondPage = Instance.new("Frame", gui)
+secondPage.Name = "SecondPage"
+secondPage.Size = UDim2.new(0.7, 0, 0.8, 0)
+secondPage.Position = UDim2.new(0.15, 0, 0.08, 0)
+secondPage.BackgroundTransparency = 1
+secondPage.Visible = false -- Изначально скрыта
+
+-- Добавляем фон, аналогичный первой странице
+local secondPageBackground = backgroundImage:Clone()
+secondPageBackground.Parent = secondPage
+
+-- Создаем кнопку для перехода на вторую страницу
+local nextPageButton = Instance.new("TextButton", menu)
+nextPageButton.Name = "NextPageButton"
+nextPageButton.Size = UDim2.new(0.1, 0, 0.1, 0)
+nextPageButton.Position = UDim2.new(0, 0, 0.9, 0) -- В левом нижнем углу
+nextPageButton.BackgroundColor3 = Color3.new(0, 0, 0)
+nextPageButton.Text = ">"
+nextPageButton.TextColor3 = Color3.new(1, 1, 1)
+nextPageButton.Font = Enum.Font.SourceSansBold
+nextPageButton.TextScaled = true
+
+-- Создаем маленькое меню для ввода кода
+local codeInputMenu = Instance.new("Frame", gui)
+codeInputMenu.Name = "CodeInputMenu"
+codeInputMenu.Size = UDim2.new(0.2, 0, 0.2, 0)
+codeInputMenu.Position = UDim2.new(0.4, 0, 0.4, 0)
+codeInputMenu.BackgroundColor3 = Color3.new(0, 0, 0)
+codeInputMenu.Visible = false -- Изначально скрыто
+
+-- closeButton в этом контексте — это кнопка закрытия в меню ввода кода
+local closeButtonCodeMenu = Instance.new("TextButton", codeInputMenu) -- Убедитесь, что создаете кнопку в правильном родительском элементе
+closeButtonCodeMenu.Size = UDim2.new(0.2, 0, 0.2, 0)
+closeButtonCodeMenu.Position = UDim2.new(0.8, 0, 0, 0) -- В правом верхнем углу маленького меню
+closeButtonCodeMenu.BackgroundColor3 = Color3.new(1, 0, 0)
+closeButtonCodeMenu.Text = "X"
+closeButtonCodeMenu.TextColor3 = Color3.new(1, 1, 1)
+closeButtonCodeMenu.Font = Enum.Font.SourceSansBold
+closeButtonCodeMenu.TextScaled = true
+
+-- Обработчик нажатия на крестик маленького меню
+closeButtonCodeMenu.MouseButton1Click:Connect(function()
+    codeInputMenu.Visible = false -- Скрываем только маленькое меню ввода кода
+end)
+
+
+-- Поле для ввода кода
+local codeInput = Instance.new("TextBox", codeInputMenu)
+codeInput.Size = UDim2.new(0.8, 0, 0.6, 0)
+codeInput.Position = UDim2.new(0.1, 0, 0.2, 0)
+codeInput.BackgroundColor3 = Color3.new(1, 1, 1)
+codeInput.Text = ""
+codeInput.Font = Enum.Font.SourceSans
+codeInput.TextScaled = true
+
+-- Логика открытия и закрытия меню кода
+nextPageButton.MouseButton1Click:Connect(function()
+    codeInputMenu.Visible = true
+end)
+
+closeButton.MouseButton1Click:Connect(function()
+    codeInputMenu.Visible = false
+end)
+
+-- Проверка кода и переход на вторую страницу
+codeInput.FocusLost:Connect(function(enterPressed)
+    if enterPressed and codeInput.Text == "123" then
+        menu.Visible = false
+        secondPage.Visible = true
+        codeInputMenu.Visible = false
+    else
+        codeInput.Text = "INCORRECT CODE"
+    end
+end)
+
+-- Создаем объект ImageLabel для фона второй страницы с другим изображением
+local secondPageBackgroundImage = Instance.new("ImageLabel")
+secondPageBackgroundImage.Name = "BackgroundImage"
+secondPageBackgroundImage.Size = UDim2.new(1, 0, 1, 0) -- Занимает весь фрейм второй страницы
+secondPageBackgroundImage.Position = UDim2.new(0, 0, 0, 0)
+secondPageBackgroundImage.Image = "rbxassetid://16252558153" -- Замените на новый AssetId изображения
+secondPageBackgroundImage.ScaleType = Enum.ScaleType.Stretch -- Растягиваем изображение на весь фрейм
+secondPageBackgroundImage.ZIndex = 1 -- Установите ZIndex меньше, чем у кнопок
+secondPageBackgroundImage.Parent = secondPage -- Родительский элемент - это фрейм второй страницы
+
+-- Делаем фон фрейма второй страницы полностью прозрачным
+secondPage.BackgroundTransparency = 1
+
+
+
+-- Кнопка возврата на первую страницу
+local previousPageButton = Instance.new("TextButton", secondPage)
+previousPageButton.Name = "PreviousPageButton"
+previousPageButton.Size = UDim2.new(0.1, 0, 0.1, 0)
+previousPageButton.Position = UDim2.new(0, 0, 0.9, 0) -- В левом нижнем углу
+previousPageButton.BackgroundColor3 = Color3.new(0, 0, 0)
+previousPageButton.Text = "<"
+previousPageButton.TextColor3 = Color3.new(1, 1, 1)
+previousPageButton.Font = Enum.Font.SourceSansBold
+previousPageButton.TextScaled = true
+
+previousPageButton.MouseButton1Click:Connect(function()
+    secondPage.Visible = false
+    menu.Visible = true
+end)
+
+-- Добавляем объект Sound для воспроизведения музыки
+local music = Instance.new("Sound", secondPage)
+music.SoundId = "rbxassetid://5410080857" -- Замените на ваш айди музыки
+music.Name = "BackgroundMusic"
+music.Looped = true -- Музыка будет зациклена
+
+-- Создаем кнопку воспроизведения/остановки музыки на второй странице
+local playButton = Instance.new("TextButton", secondPage)
+playButton.Name = "PlayButton"
+playButton.Size = UDim2.new(0.2, 0, 0.1, 0) -- Размер кнопки
+playButton.Position = UDim2.new(0.4, 0, 0.45, 0) -- Позиция кнопки по центру страницы
+playButton.BackgroundColor3 = Color3.new(1, 0, 0) -- Красный фон кнопки
+playButton.Text = "START ⊙⁠﹏⁠⊙" -- Начальный текст кнопки
+playButton.TextColor3 = Color3.new(1, 1, 1)
+playButton.Font = Enum.Font.SourceSansBold
+playButton.TextScaled = true
+
+-- Создаем текст "FREE MP3! :3" сверху кнопки
+local freeMp3Text = Instance.new("TextLabel", secondPage)
+freeMp3Text.Name = "FreeMp3Text"
+freeMp3Text.Size = UDim2.new(0.2, 0, 0.09, 0) -- Размер текста
+freeMp3Text.Position = UDim2.new(0.4, 0, 0.55, 0) -- Позиция текста над кнопкой
+freeMp3Text.BackgroundColor3 = Color3.new(1, 1, 0) -- Желтый фон текста
+freeMp3Text.BackgroundTransparency = 1 -- Прозрачный фон
+freeMp3Text.Text = "FREE MP3! :3"
+freeMp3Text.TextColor3 = Color3.new(1, 1, 0) -- Желтый цвет текста
+freeMp3Text.Font = Enum.Font.SourceSansBold
+freeMp3Text.TextScaled = true
+
+-- Функция переключения музыки
+local function toggleMusic()
+    if music.Playing then
+        music:Stop()
+        playButton.Text = "START ⊙⁠﹏⁠⊙" -- Текст кнопки, когда музыка остановлена
+    else
+        music:Play()
+        playButton.Text = "▶" -- Текст кнопки, когда музыка играет
+    end
+end
+
+
+-- Список идентификаторов изображений для анимации
+local imageIds = {
+    "rbxassetid://16258651229",
+    "rbxassetid://16258654259",
+    "rbxassetid://16258655859",
+    "rbxassetid://16258657491",
+    "rbxassetid://16258660552",
+    "rbxassetid://16258671396",
+    "rbxassetid://16258672915",
+    "rbxassetid://16258674596",
+    "rbxassetid://16258676492",
+    "rbxassetid://16258678085",
+    "rbxassetid://16258688714",
+    "rbxassetid://16258689971",
+    "rbxassetid://16258691362",
+    "rbxassetid://16258693019",
+    "rbxassetid://16258694603", 
+    "rbxassetid://16258706629",
+    "rbxassetid://16258708170",
+    "rbxassetid://16258709820",
+    "rbxassetid://16258711993",
+    "rbxassetid://16258713586",
+    "rbxassetid://16258723227",
+    "rbxassetid://16258724776"
+}
+
+-- Создаем два ImageLabel на второй странице
+local gifImage1 = Instance.new("ImageLabel")
+gifImage1.Parent = secondPage
+gifImage1.Size = UDim2.new(0, 100, 0, 100)
+gifImage1.Position = UDim2.new(1, -110, 1, -110)
+gifImage1.BackgroundTransparency = 1
+gifImage1.Visible = false -- Начинаем с невидимого состояния
+
+local gifImage2 = gifImage1:Clone()
+gifImage2.Parent = secondPage
+gifImage2.Visible = true -- Второй видимый с самого начала
+
+-- Функция для циклического изменения изображений
+local function animateGif()
+    local currentIndex = 1
+    local activeImage = gifImage1
+    local inactiveImage = gifImage2
+
+    while true do
+        -- Загружаем следующее изображение в неактивный ImageLabel
+        inactiveImage.Image = imageIds[currentIndex]
+
+        -- Подождем немного, прежде чем делать изображение видимым, чтобы уменьшить мерцание
+        -- Важно: это не гарантирует полной загрузки изображения, но может помочь в некоторых случаях
+        wait(0.060) -- Вы можете адаптировать задержку, чтобы увидеть, что работает лучше для вашей анимации
+
+        -- Делаем изображение видимым только после задержки
+        inactiveImage.Visible = true
+        activeImage.Visible = false
+
+        -- Переключаем активный и неактивный ImageLabels
+        activeImage, inactiveImage = inactiveImage, activeImage
+
+        -- Переход к следующему изображению
+        currentIndex = currentIndex + 1
+        if currentIndex > #imageIds then
+            currentIndex = 1
+        end
+
+        -- Оставляем задержку между кадрами
+        wait(0.030) -- Адаптируйте скорость анимации по необходимости
+    end
+end
+
+-- Запуск анимации в отдельном потоке
+spawn(animateGif)
+
+-- Список идентификаторов изображений для анимации
+local imageIds = {
+    "rbxassetid://16258651229",
+    "rbxassetid://16258654259",
+    "rbxassetid://16258655859",
+    "rbxassetid://16258657491",
+    "rbxassetid://16258660552",
+    "rbxassetid://16258671396",
+    "rbxassetid://16258672915",
+    "rbxassetid://16258674596",
+    "rbxassetid://16258676492",
+    "rbxassetid://16258678085",
+    "rbxassetid://16258688714",
+    "rbxassetid://16258689971",
+    "rbxassetid://16258691362",
+    "rbxassetid://16258693019",
+    "rbxassetid://16258694603", 
+    "rbxassetid://16258706629",
+    "rbxassetid://16258708170",
+    "rbxassetid://16258709820",
+    "rbxassetid://16258711993",
+    "rbxassetid://16258713586",
+    "rbxassetid://16258723227",
+    "rbxassetid://16258724776"
+}
+
+-- Создаем два ImageLabel на второй странице
+local gifImage1 = Instance.new("ImageLabel")
+gifImage1.Parent = secondPage
+gifImage1.Size = UDim2.new(0, 100, 0, 100)
+gifImage1.Position = UDim2.new(0, 10, 0, 10)
+gifImage1.BackgroundTransparency = 1
+gifImage1.Visible = false -- Начинаем с невидимого состояния
+
+local gifImage2 = gifImage1:Clone()
+gifImage2.Parent = secondPage
+gifImage2.Visible = true -- Второй видимый с самого начала
+
+-- Функция для циклического изменения изображений
+local function animateGif()
+    local currentIndex = 1
+    local activeImage = gifImage1
+    local inactiveImage = gifImage2
+
+    while true do
+        -- Загружаем следующее изображение в неактивный ImageLabel
+        inactiveImage.Image = imageIds[currentIndex]
+
+        -- Подождем немного, прежде чем делать изображение видимым, чтобы уменьшить мерцание
+        -- Важно: это не гарантирует полной загрузки изображения, но может помочь в некоторых случаях
+        wait(0.060) -- Вы можете адаптировать задержку, чтобы увидеть, что работает лучше для вашей анимации
+
+        -- Делаем изображение видимым только после задержки
+        inactiveImage.Visible = true
+        activeImage.Visible = false
+
+        -- Переключаем активный и неактивный ImageLabels
+        activeImage, inactiveImage = inactiveImage, activeImage
+
+        -- Переход к следующему изображению
+        currentIndex = currentIndex + 1
+        if currentIndex > #imageIds then
+            currentIndex = 1
+        end
+
+        -- Оставляем задержку между кадрами
+        wait(0.030) -- Адаптируйте скорость анимации по необходимости
+    end
+end
+
+-- Запуск анимации в отдельном потоке
+spawn(animateGif)
+
+
+
+
+-- Событие нажатия на кнопку
+playButton.MouseButton1Click:Connect(toggleMusic)
+
+
+-- Создаем локальную переменную для хранения секций меню
+local sections = {"I", "II", "III", "IV", "Information"}
+
+-- Создаем локальную переменную для хранения кнопок меню
+local buttons = {
+    ["I"] = {"Fling", "Invisible", "Infinite Yield", "Keyboard", "BTools", "Info Item Name (logs)"},
+    ["II"] = {"Telekinesis", "Multi Gear Press (E)", "Multi Gear (Another version)", "Focus(Item)", "Avatar upside down (FE)", "Chat Spy"},
+    ["III"] = {"Chat translator", "Bullying Chat Spam (RUS)", "Bullying Chat spam (ENG)", "Kill all NPC", "Bring all NPC", "Anti-AFC"},
+    ["IV"] = {"Audio Stealer", "Click All Buttons", "Touch all walls", "Sword Reach", "r6 animations", "¿Unknown drink?"},
+    ["Information"] = {}
+}
+
+-- Создаем локальную переменную для хранения цветов кнопок
+local colors = {
+    ["I"] = Color3.new(0, 0, 0),
+    ["II"] = Color3.new(0, 0, 0),
+    ["III"] = Color3.new(0, 0, 0),
+    ["IV"] = Color3.new(0, 0, 0),
+    ["Information"] = Color3.new(0, 0, 0)
+}
+
+-- Создаем функцию, которая создает секцию меню
+local function createSection(name, index)
+    -- Создаем локальную переменную для хранения фрейма секции
+    local section = Instance.new("Frame", menu)
+    section.Name = name
+    section.Size = UDim2.new(0.2, 0, 0.9, 0)
+    section.Position = UDim2.new(0.2 * (index - 1), 0, 0.1, 0)
+    section.BackgroundColor3 = Color3.new(0, 0, 0)
+    section.BackgroundTransparency = 1
+
+    -- Создаем локальную переменную для хранения заголовка секции
+    local sectionTitle = Instance.new("TextLabel", section)
+    sectionTitle.Name = "SectionTitle"
+    sectionTitle.Size = UDim2.new(1, 0, 0.1, 0)
+    sectionTitle.Position = UDim2.new(0, 0, 0, 0)
+    sectionTitle.BackgroundColor3 = Color3.new(0, 0, 0)
+    sectionTitle.BackgroundTransparency = 0.5
+    sectionTitle.Text = name
+    sectionTitle.TextColor3 = Color3.new(1, 1, 1)
+    sectionTitle.TextScaled = true
+    sectionTitle.Font = Enum.Font.SourceSansBold
+
+    -- Возвращаем фрейм секции
+    return section
+end
+
+-- Создаем функцию, которая создает кнопку меню
+local function createButton(name, section, index)
+    -- Создаем локальную переменную для хранения кнопки
+    local button = Instance.new("TextButton", section)
+    button.Name = name
+    button.Size = UDim2.new(0.9, 0, 0.1, 0)
+    button.Position = UDim2.new(0.05, 0, 0.1 * (index + 1), 0)
+    button.BackgroundColor3 = colors[section.Name]
+    button.BackgroundTransparency = 0.5
+    button.Text = name
+    button.TextColor3 = Color3.new(1, 1, 1)
+    button.TextScaled = true
+    button.Font = Enum.Font.SourceSansBold
+
+    -- Возвращаем кнопку
+    return button
+end
+
+-- Создаем функцию, которая создает информацию о меню
+local function createInformation(section)
+    -- Создаем локальную переменную для хранения текста информации
+    local infoText = Instance.new("TextLabel", section)
+    infoText.Name = "InfoText"
+    infoText.Size = UDim2.new(0.9, 0, 0.8, 0)
+    infoText.Position = UDim2.new(0.05, 0, 0.2, 0)
+    infoText.BackgroundColor3 = Color3.new(0, 0, 0)
+    infoText.BackgroundTransparency = 0.5
+    infoText.Text = "(⁠๑⁠•⁠﹏⁠•⁠)This is the Gui menu . You can activate the script by clicking on the button. Enjoy the game!>⁠.⁠<"
+    infoText.TextColor3 = Color3.new(1, 1, 1)
+    infoText.TextScaled = true
+    infoText.Font = Enum.Font.SourceSansBold
+    infoText.TextWrapped = true
+end
+
+-- -- Создаем функцию, которая создает все секции и кнопки меню
+local function createMenu()
+    -- Перебираем все секции
+    for i, sectionName in pairs(sections) do
+        -- Создаем секцию
+        local section = createSection(sectionName, i)
+        
+        -- Если секция называется "Information", то создаем информацию о меню
+        if sectionName == "Information" then
+            createInformation(section)
+        end
+        
+        -- Перебираем все кнопки в секции
+        for j, buttonName in ipairs(buttons[sectionName]) do
+            -- Создаем кнопку
+            local button = createButton(buttonName, section, j)
+            
+            -- Добавляем функцию, которая срабатывает при нажатии на кнопку
+            button.MouseButton1Click:Connect(function()
+                if button.Name == "Fling" then
+                    loadstring(game:HttpGet("https://raw.githubusercontent.com/0Ben1/fe./main/Fling%20GUI"))()
+                elseif button.Name == "Invisible" then
+                        loadstring(game:HttpGet('https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Invisible%20Gui'))()
+                      elseif button.Name == "Infinite Yield" then
+                        loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))() 
+                      elseif button.Name == "Keyboard" then
+                         loadstring(game:HttpGet("https://gist.githubusercontent.com/RedZenXYZ/4d80bfd70ee27000660e4bfa7509c667/raw/da903c570249ab3c0c1a74f3467260972c3d87e6/KeyBoard%2520From%2520Ohio%2520Fr%2520Fr"))()
+                      elseif button.Name == "BTools" then 
+                          loadstring(game:HttpGet('https://pastebin.com/raw/LETNPL0E'))()
+                      elseif button.Name == "Info Item Name (logs)" then 
+                          loadstring(game:HttpGet("https://raw.githubusercontent.com/Tomato2001/Nsbgshsdn/main/Info"))() 
+                      elseif button.Name == "Telekinesis" then 
+                          loadstring(game:HttpGet(('https://raw.githubusercontent.com/SAZXHUB/Control-update/main/README.md'),true))()
+                      elseif button.Name == "Multi Gear Press (E)" then 
+                           lp = game:GetService("Players").LocalPlayer
+ 
+game:GetService("UserInputService").InputBegan:Connect(function(key)
+ if key.KeyCode == Enum.KeyCode.E then
+  for i,tool in pairs(lp.Backpack:GetChildren()) do
+   if tool:IsA("Tool") then
+    tool.Parent = lp.Character
+    tool:Activate()
+    task.wait()
+    tool.Parent = lp.Backpack
+   end
+  end
+ end
+end)
+
+                      elseif button.Name == "Multi Gear (Another version)" then 
+                       loadstring(game:HttpGet("https://raw.githubusercontent.com/Tomato2001/Nsbgshsdn/main/Gear"))()
+                      elseif button.Name == "Focus(Item)" then 
+                        local lp = game.Players.LocalPlayer
+local mouse = lp:GetMouse()
+
+local ft = Instance.new("Tool")
+ft.Name = "Focus"
+ft.RequiresHandle = false
+ft.Parent = lp.Backpack
+ft.Activated:Connect(function()
+ local obj = mouse.Target
+ if obj:IsA("BasePart") or obj:IsA("Part") or obj:IsA("MeshPart") or obj:IsA("CornerWedgePart") or obj:IsA("TrussPart") or obj:IsA("WedgePart") then
+  if not obj.Anchored then
+      local bambam = Instance.new("BodyAngularVelocity")
+      bambam.Name = "BAM BAM AHAHHAHAHHAHAH"
+      bambam.Parent = obj
+      bambam.AngularVelocity = Vector3.new(99999999,99999999,99999999)
+      bambam.MaxTorque = Vector3.new(math.huge,math.huge,math.huge)
+      bambam.P = math.huge
+     end
+ end
+end) 
+                      elseif button.Name == "Avatar upside down (FE)" then 
+                         loadstring(game:HttpGet("https://raw.githubusercontent.com/Tomato2001/Nsbgshsdn/main/Avatar"))()
+                      elseif button.Name == "Chat Spy" then
+                         loadstring(game:HttpGet("https://raw.githubusercontent.com/Tomato2001/Nsbgshsdn/main/Spy"))()
+                      elseif button.Name == "Chat translator" then
+                        loadstring(game:HttpGet("https://raw.githubusercontent.com/Tomato2001/Nsbgshsdn/main/Trans"))() 
+                      elseif button.Name == "Bullying Chat Spam (RUS)" then
+                          loadstring(game:HttpGet("https://raw.githubusercontent.com/Tomato2001/Nsbgshsdn/main/ChatRu"))() 
+                      elseif button.Name == "Bullying Chat spam (ENG)" then
+                          loadstring(game:HttpGet("https://raw.githubusercontent.com/Tomato2001/Nsbgshsdn/main/ChatEn"))() 
+                      elseif button.Name == "Kill all NPC" then
+                          -- Устанавливаем свойства SimulationRadius и MaxSimulationRadius для локального игрока
+sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius", 112412400000)
+sethiddenproperty(game.Players.LocalPlayer, "MaxSimulationRadius", 112412400000)
+
+-- Перебираем всех потомков в Workspace
+for i, d in pairs(game.Workspace:GetDescendants()) do
+    -- Проверяем, является ли d Humanoid и не принадлежит ли его Parent к игрокам
+    if d.ClassName == 'Humanoid' and not game.Players:FindFirstChild(d.Parent.Name) then
+        -- Устанавливаем здоровье NPC в 0
+        d.Health = 0
+    end
+end
+                      elseif button.Name == "Bring all NPC" then
+                          local Players = game:GetService("Players")
+local RunService = game:GetService("RunService") 
+
+Bring = Value
+while Bring do
+  for i, player in ipairs(Players:GetPlayers()) do
+    if player.Character then
+      for i, model in ipairs(workspace:GetDescendants()) do
+        if model:IsA("Model") and model:FindFirstChild("Humanoid") then
+          model:MoveTo(player.Character.Head.Position)
+        end
+      end 
+    end
+  end
+  RunService.Heartbeat:Wait()
+end
+                      elseif button.Name == "Anti-AFC" then
+                          loadstring(game:HttpGet("https://pastebin.com/raw/9QCyuc2p"))()
+                      elseif button.Name == "Audio Stealer" then
+                          loadstring(game:HttpGet("https://pastebin.com/raw/tj9B565T"))()
+                      elseif button.Name == "Click All Buttons" then
+                        game:GetService("CoreGui").PurchasePrompt.Enabled = false
+_G.Lag = Value
+while _G.Lag do
+for i,v in pairs(workspace:GetDescendants()) do
+   if v:IsA("ClickDetector") then
+    fireclickdetector(v)
+   end
+end
+  wait(1)
+  end
+                      elseif button.Name == "Touch all walls" then
+                          local plr = game.Players.LocalPlayer.Character.Head
+for i, v in pairs(game:GetService("Workspace"):GetDescendants()) do
+        if v.Name == "TouchInterest" and v.Parent then
+        firetouchinterest(plr, v.Parent, 0)
+    end
+end 
+                      elseif button.Name == "Sword Reach" then
+                          local range = 1000
+local player = game:GetService("Players").LocalPlayer
+game:GetService("RunService").RenderStepped:Connect(function()
+    local p = game.Players:GetPlayers()
+    for i = 2, #p do local v = p[i].Character
+local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
+            if tool and tool:FindFirstChild("Handle") then
+                tool:Activate()
+                for i,v in next, v:GetChildren() do
+                    if v:IsA("BasePart") then
+                        firetouchinterest(tool.Handle,v,0)
+                        firetouchinterest(tool.Handle,v,1)
+                    end
+                end
+            end
+        end
+end)
+                      elseif button.Name == "r6 animations" then
+                          loadstring(game:HttpGet("https://pastebin.com/raw/RmD3qNp7", true))()
+                      elseif button.Name == "¿Unknown drink?" then
+                          loadstring(game:HttpGet("https://raw.githubusercontent.com/Tomato2001/Fcbjgdsawfg/main/UedvjdEudwqi1"))()
+                          
+                          
+                          
+                        
+                        
+                       
+                         
+                         
+                         
+                         
+                end
+            end)
+        end -- Закрытие внутреннего цикла 'for j, buttonName in ipairs(buttons[sectionName])'
+    end -- Закрытие внешнего цикла 'for i, sectionName in pairs(sections)'
+end -- Закрытие функции 'createMenu'
+
+-- Другой код ...
+
+-- Не забудьте вызвать функцию 'createMenu' в нужном месте вашего скрипта
+createMenu()
+     
+        -- Если секция называется "Information", то создаем информацию о меню
+        if sectionName == "Information" then
+            createInformation(section)
+        end
+
+-- Создаем функцию, которая срабатывает при нажатии на кнопку закрытия меню
+closeButton.MouseButton1Click:Connect(function()
+    -- Удаляем графический интерфейс
+    gui:Destroy()
+end)
+
+-- Вызываем функцию, которая создает все секции и кнопки меню
+createMenu()
