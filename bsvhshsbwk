@@ -1,3 +1,4 @@
+
 -- Создаем локальную переменную для хранения игрока
 local player = game.Players.LocalPlayer
 
@@ -61,7 +62,7 @@ local minimizeButton = Instance.new("TextButton", menu)
 minimizeButton.Name = "MinimizeButton"
 minimizeButton.Size = UDim2.new(0.1, 0, 0.1, 0)
 minimizeButton.Position = UDim2.new(0.8, 0, 0, 0) -- Сдвигаем налево относительно кнопки закрытия
-minimizeButton.BackgroundColor3 = Color3.new(0, 0, 1)
+minimizeButton.BackgroundColor3 = Color3.fromRGB(0, 0, 1)
 minimizeButton.BackgroundTransparency = 0.5
 minimizeButton.Text = "–"
 minimizeButton.TextColor3 = Color3.new(1, 1, 1)
@@ -79,7 +80,8 @@ expandButton.Text = "+"
 expandButton.TextColor3 = Color3.new(1, 1, 1)
 expandButton.TextScaled = true
 expandButton.Font = Enum.Font.SourceSansBold
-expandButton.Visible = false -- Сначала кнопка невидима
+expandButton.Visible = false 
+
 
 -- Функция для сворачивания меню
 minimizeButton.MouseButton1Click:Connect(function()
@@ -113,7 +115,7 @@ nextPageButton.Name = "NextPageButton"
 nextPageButton.Size = UDim2.new(0.1, 0, 0.1, 0)
 nextPageButton.Position = UDim2.new(0, 0, 0.9, 0) -- В левом нижнем углу
 nextPageButton.BackgroundColor3 = Color3.new(0, 0, 0)
-nextPageButton.Text = ">"
+nextPageButton.Text = "?"
 nextPageButton.TextColor3 = Color3.new(1, 1, 1)
 nextPageButton.Font = Enum.Font.SourceSansBold
 nextPageButton.TextScaled = true
@@ -389,11 +391,287 @@ end
 -- Запуск анимации в отдельном потоке
 spawn(animateGif)
 
+-- Создаем кнопку для перехода на новую страницу, которая будет расположена в правом нижнем углу
+local goToPageButton = Instance.new("TextButton", menu)
+goToPageButton.Name = "GoToPageButton"
+goToPageButton.Size = UDim2.new(0.1, 0, 0.1, 0)
+goToPageButton.Position = UDim2.new(0.7, 0, 0.9, 0) -- Правый нижний угол
+goToPageButton.BackgroundColor3 = Color3.new(0, 0, 0) -- Серый цвет
+goToPageButton.Text = ">"
+goToPageButton.TextColor3 = Color3.new(1, 1, 1)
+goToPageButton.Font = Enum.Font.SourceSansBold
+goToPageButton.TextScaled = true
+
+-- Создаем новую страницу
+local newPage = Instance.new("Frame", gui)
+newPage.Name = "NewPage"
+newPage.Size = UDim2.new(0.7, 0, 0.8, 0)
+newPage.Position = UDim2.new(0.15, 0, 0.08, 0)
+newPage.BackgroundTransparency = 1
+newPage.Visible = false -- Изначально скрыта, как и вторая страница
+
+-- Добавляем фон к новой странице, аналогичный первой странице
+local newPageBackground = backgroundImage:Clone()
+newPageBackground.Parent = newPage
+
+-- Логика перехода на новую страницу
+goToPageButton.MouseButton1Click:Connect(function()
+    menu.Visible = false -- Скрываем первую страницу
+    newPage.Visible = true -- Отображаем новую страницу
+end)
+
+-- Добавляем заголовок к новой странице
+local newPageTitle = Instance.new("TextLabel", newPage)
+newPageTitle.Name = "Title"
+newPageTitle.Size = UDim2.new(1, 0, 0.1, 0)
+newPageTitle.Position = UDim2.new(0, 0, 0, 0)
+newPageTitle.BackgroundColor3 = Color3.new(0, 0, 0)
+newPageTitle.BackgroundTransparency = 0.5
+newPageTitle.Text = "🍅 Tomato Hub 🍅"
+newPageTitle.TextColor3 = Color3.new(1, 1, 1)
+newPageTitle.TextScaled = true
+newPageTitle.Font = Enum.Font.SourceSansBold
+
+-- Добавляем кнопку закрытия к новой странице
+local newPageCloseButton = Instance.new("TextButton", newPage)
+newPageCloseButton.Name = "CloseButton"
+newPageCloseButton.Size = UDim2.new(0.1, 0, 0.1, 0)
+newPageCloseButton.Position = UDim2.new(0.9, 0, 0, 0)
+newPageCloseButton.BackgroundColor3 = Color3.new(1, 0, 0)
+newPageCloseButton.BackgroundTransparency = 0.5
+newPageCloseButton.Text = "X"
+newPageCloseButton.TextColor3 = Color3.new(1, 1, 1)
+newPageCloseButton.TextScaled = true
+newPageCloseButton.Font = Enum.Font.SourceSansBold
+
+-- Логика закрытия новой страницы
+newPageCloseButton.MouseButton1Click:Connect(function()
+    newPage.Visible = false
+    menu.Visible = false -- Показываем основное меню
+end)
+
+-- Создаем кнопку сворачивания для newPage
+local minimizeButtonNewPage = Instance.new("TextButton", newPage)
+minimizeButtonNewPage.Name = "MinimizeButton"
+minimizeButtonNewPage.Size = UDim2.new(0.1, 0, 0.1, 0)
+minimizeButtonNewPage.Position = UDim2.new(0.8, 0, 0, 0) -- Настройте позицию по вашему желанию
+minimizeButtonNewPage.BackgroundColor3 = Color3.fromRGB(0, 0, 1) -- Оранжевый цвет для отличия
+minimizeButtonNewPage.Text = "–"
+minimizeButtonNewPage.TextColor3 = Color3.new(1, 1, 1)
+minimizeButtonNewPage.TextScaled = true
+minimizeButtonNewPage.Font = Enum.Font.SourceSansBold
+
+-- Логика сворачивания newPage при нажатии
+minimizeButtonNewPage.MouseButton1Click:Connect(function()
+    newPage.Visible = false
+    expandButton.Visible = true -- Делаем кнопку развертывания видимой
+end)
+
+
+
+-- Кнопка возврата на первую страницу из новой страницы
+local backToMenuButton = Instance.new("TextButton", newPage)
+backToMenuButton.Name = "BackToMenuButton"
+backToMenuButton.Size = UDim2.new(0.1, 0, 0.1, 0)
+backToMenuButton.Position = UDim2.new(0, 0, 0.9, 0) -- В левом нижнем углу новой страницы
+backToMenuButton.BackgroundColor3 = Color3.new(0, 0, 0) -- Серый цвет
+backToMenuButton.Text = "<"
+backToMenuButton.TextColor3 = Color3.new(1, 1, 1)
+backToMenuButton.Font = Enum.Font.SourceSansBold
+backToMenuButton.TextScaled = true
+
+-- Логика возврата на первую страницу
+backToMenuButton.MouseButton1Click:Connect(function()
+    newPage.Visible = false -- Скрываем новую страницу
+    menu.Visible = true -- Отображаем первую страницу
+end)
 
 
 
 -- Событие нажатия на кнопку
 playButton.MouseButton1Click:Connect(toggleMusic)
+
+-- Переиспользуем уже существующие переменные для секций и кнопок
+local sectionsNewPage = {"V", "VI", "VII", "VIII", "XI"}
+local buttonsNewPage = {
+    ["V"] = {"Admin Detector", "Hitbox GUI", "ESP universal", "only r15 animations", "Budgie HUB (by ADSKer)", "Tiger ADMIN (Prison Life)"},
+    ["VI"] = {"Fling all", "Chat Bypass", "Grip Tools GUI", "...", "...", "..."},
+    ["VII"] = {"...", "...", "...", "...", "...", ".. "},
+    ["VIII"] = {"...", "...", "...", "...", "...", "..."},
+    ["XI"] = {"...", "...", "...", "...", "...", "..."}
+}
+
+-- Функция для добавления действий к кнопкам
+local function addActionToButton(button, action)
+    button.MouseButton1Click:Connect(action)
+end
+
+-- Функция для создания секций и кнопок на NewPage
+local function createMenuNewPage(parentPage, sections, buttons)
+    for i, sectionName in ipairs(sections) do
+        local section = Instance.new("Frame", parentPage)
+        section.Name = sectionName
+        section.Size = UDim2.new(0.2, 0, 0.9, 0)
+        section.Position = UDim2.new(0.2 * (i - 1), 0, 0.1, 0)
+        section.BackgroundColor3 = Color3.new(0, 0, 0)
+        section.BackgroundTransparency = 1
+
+        local sectionTitle = Instance.new("TextLabel", section)
+        sectionTitle.Name = "SectionTitle"
+        sectionTitle.Size = UDim2.new(1, 0, 0.1, 0)
+        sectionTitle.Position = UDim2.new(0, 0, 0, 0)
+        sectionTitle.BackgroundColor3 = Color3.new(0, 0, 0)
+        sectionTitle.BackgroundTransparency = 0.24
+        sectionTitle.Text = sectionName
+        sectionTitle.TextColor3 = Color3.new(1, 1, 1)
+        sectionTitle.TextScaled = true
+        sectionTitle.Font = Enum.Font.SourceSansBold
+
+        for j, buttonName in ipairs(buttons[sectionName]) do
+            local button = Instance.new("TextButton", section)
+            button.Name = buttonName
+            button.Size = UDim2.new(0.9, 0, 0.1, 0)
+            button.Position = UDim2.new(0.05, 0, 0.1 * (j + 1), 0)
+            button.BackgroundColor3 = Color3.new(0, 0, 0)
+            button.BackgroundTransparency = 0.24
+            button.Text = buttonName
+            button.TextColor3 = Color3.new(1, 1, 1)
+            button.TextScaled = true
+            button.Font = Enum.Font.SourceSansBold
+
+            -- Добавляем действия для кнопок
+            if buttonName == "Admin Detector" then
+                addActionToButton(button, function()
+                    -- Assuming the necessary Network functionality is pre-loaded or available internally
+local Network -- Initialize this with your pre-loaded or internally available Network functionality
+
+local Players = game:GetService("Players");
+local GroupService = game:GetService("GroupService")
+local CreatorId, PlaceId, JobId = game.CreatorId, game.PlaceId, game.JobId;
+local LocalPlayer = Players.LocalPlayer;
+local TeleportService = game:GetService("TeleportService");
+
+-- Уведомление о активации скрипта
+game.StarterGui:SetCore("SendNotification", {
+    Title = "Admin detector activated"; -- Заголовок уведомления
+    Text = "Admin detector activated!"; -- Текст уведомления
+    Duration = 5; -- Длительность показа уведомления в секундах
+})
+
+local GroupId = nil;
+if Players:GetPlayerByUserId(CreatorId) == nil then
+local Group = GroupService:GetGroupInfoAsync(CreatorId)
+GroupId = Group.Id;
+end
+
+local function GetWorstRank()
+local WorstRank = math.huge
+local Group = GroupService:GetGroupInfoAsync(CreatorId)
+for _, Rank in next, Group.Roles do
+if Rank.Rank < WorstRank then
+WorstRank = Rank.Rank
+end
+end
+return WorstRank
+end
+
+local function IsAdmin(Player)
+if Player.UserId == CreatorId then
+return true;
+elseif GroupId ~= nil then
+local InGroup = Player:IsInGroup(CreatorId)
+local GroupRank = Player:GetRankInGroup(GroupId)
+local WorstRank = GetWorstRank()
+
+if InGroup and GroupRank > WorstRank then
+return true;
+end
+end
+return false;
+end
+
+-- Server hopping logic will need to be adjusted as it relies on web requests to fetch server data
+-- Consider pre-determining server targets or using Roblox matchmaking services
+
+for _, Player in next, Players:GetPlayers() do
+if IsAdmin(Player) then
+LocalPlayer:Kick(string.format("Admin Detected (%s), adjusting gameplay...", Player.Name))
+-- Adjust gameplay logic here instead of server hopping
+end
+end
+
+Players.PlayerAdded:Connect(function(Player)
+if IsAdmin(Player) then
+LocalPlayer:Kick(string.format("Admin Detected (%s), adjusting gameplay...", Player.Name))
+-- Adjust gameplay logic here instead of server hopping
+end
+end)
+                end)
+            elseif buttonName == "Hitbox GUI" then
+                addActionToButton(button, function()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Tomato2001/Nsbgshsdn/main/H1itb"))()
+                end)
+            elseif buttonName == "ESP universal" then
+                addActionToButton(button, function()
+                    getgenv().enabled = true --Toggle on/off
+getgenv().filluseteamcolor = false --Toggle fill color using player team color on/off
+getgenv().outlineuseteamcolor = false --Toggle outline color using player team color on/off
+getgenv().fillcolor = Color3.fromRGB(255, 125, 0) --Change fill color, no need to edit if using team color
+getgenv().outlinecolor = Color3.fromRGB(1, 1, 1) --Change outline color, no need to edit if using team color
+getgenv().filltrans = 0.75 --Change fill transparency
+getgenv().outlinetrans = 0.75 --Change outline transparency
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/zntly/highlight-esp/main/esp.lua"))("t.me/arceusxscripts")
+                end)
+                elseif buttonName == "only r15 animations" then
+addActionToButton(button, function()
+                    --[[
+	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
+]]
+loadstring(game:HttpGet("https://raw.githubusercontent.com/GamingScripter/Animation-Hub/main/Animation%20Gui", true))()
+                end)
+                elseif buttonName == "Budgie HUB (by ADSKer)" then
+addActionToButton(button, function()
+                    loadstring(game:HttpGet("https://raw.githubusercontent.com/ADSKerOffical/PBC/main/Lua-Obfuscation"))()
+                end)
+                elseif buttonName == "Tiger ADMIN (Prison Life)" then
+addActionToButton(button, function()
+                    loadstring(game:HttpGet("https://raw.githubusercontent.com/dalloc2/Roblox/main/TigerAdmin.lua"))("https://t.me/arceusxscripts")
+                end)
+                elseif buttonName == "Fling all" then
+addActionToButton(button, function()
+                    --[[
+	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
+]]
+loadstring(game:HttpGet("https://pastebin.com/raw/zqyDSUWX"))()
+                end)
+                elseif buttonName == "Chat Bypass" then
+addActionToButton(button, function()
+                    --[[
+	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
+]]
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Synergy-Networks/products/main/BetterBypasser/loader.lua",true))()
+                end)
+                elseif buttonName == "Grip Tools GUI" then
+addActionToButton(button, function()
+                    loadstring(game:HttpGet("https://pastebin.com/raw/z6UmQaqN"))()
+                end)
+                
+            -- Добавьте дополнительные условия для других кнопок по аналогии
+            else
+                addActionToButton(button, function()
+                    print("Button pressed " .. buttonName)
+                    -- Здесь можно добавить общее действие для кнопок без специфической логики
+                end)
+            end
+        end
+    end
+end
+
+-- Вызываем функцию для создания меню на второй странице
+createMenuNewPage(newPage, sectionsNewPage, buttonsNewPage)
+
+
 
 
 -- Создаем локальную переменную для хранения секций меню
@@ -470,7 +748,7 @@ local function createInformation(section)
     infoText.Position = UDim2.new(0.05, 0, 0.2, 0)
     infoText.BackgroundColor3 = Color3.new(0, 0, 0)
     infoText.BackgroundTransparency = 0.5
-    infoText.Text = "(⁠๑⁠•⁠﹏⁠•⁠)This is the Gui menu . You can activate the script by clicking on the button. Enjoy the game!>⁠.⁠<"
+    infoText.Text = "(⁠๑⁠•⁠﹏⁠•⁠)This is the Gui menu .\n You can activate the script by clicking on the button.\n Enjoy the game!>⁠.⁠<"
     infoText.TextColor3 = Color3.new(1, 1, 1)
     infoText.TextScaled = true
     infoText.Font = Enum.Font.SourceSansBold
