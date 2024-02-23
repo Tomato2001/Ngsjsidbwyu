@@ -494,11 +494,11 @@ playButton.MouseButton1Click:Connect(toggleMusic)
 -- Переиспользуем уже существующие переменные для секций и кнопок
 local sectionsNewPage = {"V", "VI", "VII", "VIII", "XI"}
 local buttonsNewPage = {
-    ["V"] = {"Admin Detector", "Hitbox GUI", "ESP universal", "only r15 animations", "Budgie HUB (by ADSKer)", "Tiger ADMIN (Prison Life)"},
-    ["VI"] = {"Fling all", "Chat Bypass", "Grip Tools GUI", "...", "...", "..."},
+    ["V"] = {"Admin Detector(doesn't work with anti kick)", "Hitbox GUI", "ESP universal", "only r15 animations", "Budgie HUB (by ADSKer)", "Tiger ADMIN (Prison Life)"},
+    ["VI"] = {"Fling all", "Chat Bypass", "Grip Tools GUI", "Anti-kick", "...", "..."},
     ["VII"] = {"...", "...", "...", "...", "...", ".. "},
     ["VIII"] = {"...", "...", "...", "...", "...", "..."},
-    ["XI"] = {"...", "...", "...", "...", "...", "..."}
+    ["XI"] = {"...", "...", "...", "...", "...", "Neco Arc.exe"}
 }
 
 -- Функция для добавления действий к кнопкам
@@ -540,7 +540,7 @@ local function createMenuNewPage(parentPage, sections, buttons)
             button.Font = Enum.Font.SourceSansBold
 
             -- Добавляем действия для кнопок
-            if buttonName == "Admin Detector" then
+            if buttonName == "Admin Detector(doesn't work with anti kick)" then
                 addActionToButton(button, function()
                     -- Assuming the necessary Network functionality is pre-loaded or available internally
 local Network -- Initialize this with your pre-loaded or internally available Network functionality
@@ -656,6 +656,27 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Synergy-Networks/prod
 addActionToButton(button, function()
                     loadstring(game:HttpGet("https://pastebin.com/raw/z6UmQaqN"))()
                 end)
+                elseif buttonName == "Anti-kick" then
+addActionToButton(button, function()
+                    local plr = game:GetService("Players").LocalPlayer
+
+getgenv().Anti = true -- Re-Execute if you change it
+
+local Anti
+Anti = hookmetamethod(game, "__namecall", function(self, ...)
+        if self == plr and getnamecallmethod():lower() == "kick" and getgenv().Anti then
+            return warn("[ANTI-KICK] Client Tried To Call Kick Function On LocalPlayer")
+        end
+        return Anti(self, ...)
+    end)
+                end)
+                elseif buttonName == "Neco Arc.exe" then
+addActionToButton(button, function()
+                  loadstring(game:HttpGet("https://raw.githubusercontent.com/Tomato2001/Nsbgshsdn/main/N3c0"))()
+                end)
+                
+                
+                
                 
             -- Добавьте дополнительные условия для других кнопок по аналогии
             else
