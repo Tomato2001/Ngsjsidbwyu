@@ -495,7 +495,7 @@ playButton.MouseButton1Click:Connect(toggleMusic)
 local sectionsNewPage = {"V", "VI", "VII", "VIII", "XI"}
 local buttonsNewPage = {
     ["V"] = {"Admin Detector(doesn't work with anti kick)", "Hitbox GUI", "ESP universal", "only r15 animations", "Budgie HUB (by ADSKer)", "Tiger ADMIN (Prison Life)"},
-    ["VI"] = {"Fling all", "Chat Bypass", "Grip Tools GUI", "Anti-kick", "...", "..."},
+    ["VI"] = {"Fling all", "Chat Bypass", "Grip Tools GUI", "Anti-kick", "Anti-fling", "..."},
     ["VII"] = {"...", "...", "...", "...", "...", ".. "},
     ["VIII"] = {"...", "...", "...", "...", "...", "..."},
     ["XI"] = {"...", "...", "...", "...", "...", "Neco Arc.exe"}
@@ -674,6 +674,11 @@ Anti = hookmetamethod(game, "__namecall", function(self, ...)
 addActionToButton(button, function()
                   loadstring(game:HttpGet("https://raw.githubusercontent.com/Tomato2001/Nsbgshsdn/main/N3c0"))()
                 end)
+                elseif buttonName == "Anti-fling" then
+addActionToButton(button, function()
+                  loadstring(game:HttpGet("https://raw.githubusercontent.com/Tomato2001/Nsbgshsdn/main/Antfln"))()
+                end)
+                
                 
                 
                 
